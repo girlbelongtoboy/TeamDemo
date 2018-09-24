@@ -1,0 +1,101 @@
+java类:
+package test;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Map;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+
+
+
+public class loginServlet implements Servlet{
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ServletConfig getServletConfig() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getServletInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    private  ServletConfig  ServletConfig;
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+	       this.ServletConfig=config;
+		
+	}
+
+	@Override
+	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+	    String username=request.getParameter("username");
+	    String password=request.getParameter("password");
+	    ServletContext  context=ServletConfig.getServletContext();
+	    String initUser= context.getInitParameter("user");
+	    String initPassword=context.getInitParameter("password");
+	    
+	    PrintWriter out=response.getWriter();
+	    if(initUser.equals(username)&&initPassword.equals(password)) {
+	    	out.print("Hello:"+username);
+	    }else {
+	    	out.print("Sorry:"+username);
+	    }
+	    
+	}
+
+}
+
+html类:<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+   <form action="loginServlet" method="post">
+       user:<input  type="text" name="username"/>
+       password:<input type="password" name="password"/>
+   <input type="submit" value="Submit"/>
+   </form>
+</body>
+</html>
+
+web.xml配置:<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  
+  <context-param>
+      <param-name>user</param-name>
+      <param-value>atguigu</param-value>
+  </context-param>
+  <context-param>
+      <param-name>password</param-name>
+      <param-value>123567</param-value>
+  </context-param>
+  
+  <servlet>
+     <servlet-name>loginServlet</servlet-name>
+     <servlet-class>test.loginServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+     <servlet-name>loginServlet</servlet-name>
+     <url-pattern>/loginServlet</url-pattern>
+  </servlet-mapping>
+  
